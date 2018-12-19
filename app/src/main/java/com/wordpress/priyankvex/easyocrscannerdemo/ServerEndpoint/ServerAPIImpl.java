@@ -1,5 +1,6 @@
 package com.wordpress.priyankvex.easyocrscannerdemo.ServerEndpoint;
 
+import android.accounts.NetworkErrorException;
 import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
@@ -36,16 +37,28 @@ public class ServerAPIImpl implements ServerAPI {
         serverEndPoint=SERVER_END_POINT+":"+PORT+"/";
     }
     //http://34.240.58.150:8090/api/scan-text/yoav"
+    //"['Yoav weiss', 'yoav.weiss@imperva.com','Yoav weiss2', 'yoav.weiss@imperva.com','Yoav weiss3', 'yoav.weiss@imperva.com']"
     @Override
-    public NamesList getListOfNames(String ocrTxt) {
+    public NamesList getListOfNames(String ocrTxt) throws NetworkErrorException {
         NamesList parsedList=null;
-        String responseStr = "['Yoav weiss', 'yoav.weiss@imperva.com','Yoav weiss2', 'yoav.weiss@imperva.com','Yoav weiss3', 'yoav.weiss@imperva.com']";//getListFromServer(ocrTxt);
+        String responseStr =null;
+        try {
+            responseStr = getListFromServer(ocrTxt);
+        }catch (Exception e){
+            throw new NetworkErrorException("failed to reach server");
+        }
+        //no names found
+        if(responseStr.equals("]")){
+            System.out.println("failed to find names on server");
+            return null;
+        }
         com.google.gson.Gson response = new Gson();
         ArrayList<String> names = response.fromJson(responseStr, ArrayList.class);
+        parsedList.names2Mails=names;
         return parsedList;
     }
     @Override
-    public void SendConfirmationToServer(Operation operation, String mail ,Floor floor) {
+    public void SendConfirmationToServer(Operation operation, String mail ,Floor floor)throws NetworkErrorException {
         String apiString=CONFIRMATION;
         String floorAPI="/"+floor+"/";
         String resString;
@@ -58,7 +71,11 @@ public class ServerAPIImpl implements ServerAPI {
                 break;
         }
         URL url = buildAPI(apiString);
-        resString = urlConnection(url);
+        try {
+            resString = urlConnection(url);
+        }catch (Exception e) {
+            throw new NetworkErrorException("failed to reach server");
+        }
         System.out.println(" SendConfirmationToServer result: "+resString);
     }
 
