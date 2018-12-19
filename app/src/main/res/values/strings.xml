@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">Easy Ocr Scanner</string>
-
+    <string name="app_name">Scan It Forward</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 </resources>
