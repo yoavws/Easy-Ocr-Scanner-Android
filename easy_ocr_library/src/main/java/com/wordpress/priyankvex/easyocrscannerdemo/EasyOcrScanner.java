@@ -3,6 +3,7 @@ package com.wordpress.priyankvex.easyocrscannerdemo;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
@@ -31,7 +32,7 @@ public class EasyOcrScanner {
     }
 
     public void takePicture(){
-        Intent e = new Intent("android.media.action.IMAGE_CAPTURE");
+        Intent e = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         /*
         this.filePathOriginal = FileUtils.getDirectory(this.directoryPathOriginal) + File.separator + Calendar.getInstance().getTimeInMillis() + ".jpg";
 
@@ -57,6 +58,20 @@ public class EasyOcrScanner {
         thread.execute();
     }
 
+    public  void onImageTaken(int requestCode, int resultCode, Intent data){
+        onImageTaken();
+        /*
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                mImageView.setImageBitmap(imageBitmap);
+            }
+        }
+         */
+
+    }
+
     private void startActivity(Intent intent){
         if(this.mActivity != null) {
             this.mActivity.startActivityForResult(intent, this.requestCode);
@@ -66,6 +81,4 @@ public class EasyOcrScanner {
     public void setOcrScannerListener(EasyOcrScannerListener mOcrScannerListener) {
         this.mOcrScannerListener = mOcrScannerListener;
     }
-
-
 }
