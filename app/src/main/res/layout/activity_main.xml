@@ -16,6 +16,7 @@
         />
 
 
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,14 +24,23 @@
         android:layout_marginTop="20dp"
         android:text="Scan1"
         android:layout_gravity="center_vertical"
+        android:visibility="gone"
         />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonThatWillWork"
-        android:text="Scan2"
+        android:text="Scan"
         android:layout_below="@id/button1" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/proccessImageButton"
+        android:text="proccess"
+        android:layout_below="@id/buttonThatWillWork"
+        android:visibility="gone"/>
 
     <ImageView
         android:layout_width="wrap_content"

@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wordpress.priyankvex.easyocrscannerdemo.ServerEndpoint.NamesList;
 import com.wordpress.priyankvex.easyocrscannerdemo.ServerEndpoint.ServerAPI;
@@ -134,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements EasyOcrScannerLis
             }catch (Exception e){
                 System.err.println("failed to reach server");
             }
+            Toast toast = Toast.makeText(this.context, "E-Mail sent successfuly!" , Toast.LENGTH_LONG);
+            toast.show();
 
             ////
             proccessButton.setOnClickListener(new View.OnClickListener() {
