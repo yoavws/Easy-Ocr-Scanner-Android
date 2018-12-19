@@ -4,9 +4,14 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+
+import com.wordpress.priyankvex.easyocrscannerdemo.ServerEndpoint.NamesList;
+import com.wordpress.priyankvex.easyocrscannerdemo.ServerEndpoint.ServerAPI;
+import com.wordpress.priyankvex.easyocrscannerdemo.ServerEndpoint.ServerAPIImpl;
 
 
 public class MainActivity extends AppCompatActivity implements EasyOcrScannerListener{
@@ -18,6 +23,24 @@ public class MainActivity extends AppCompatActivity implements EasyOcrScannerLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (android.os.Build.VERSION.SDK_INT > 9)
+        {
+            StrictMode.ThreadPolicy policy = new
+                    StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
+        /////
+        System.out.println("on create starting..");
+        ServerAPI serverapi=new ServerAPIImpl();
+        NamesList listOfNames = ((ServerAPIImpl) serverapi).getListOfNames("yoav");
+
+        //((ServerAPIImpl) serverapi).SendConfirmationToServer(ServerAPIImpl.Operation.MAIL,"yoav.weiss@imperva.com",ServerAPIImpl.Floor.FIRST);
+
+        //System.out.println("server res"+listFromServer);
+
+        /////
         setContentView(R.layout.activity_main);
 
         textView = (TextView) findViewById(R.id.textView);

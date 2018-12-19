@@ -1,11 +1,12 @@
 package com.wordpress.priyankvex.easyocrscannerdemo.ServerEndpoint;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-class NamesList{
-    private HashMap<String,String> names2Mails;
+public class NamesList{
+    private ArrayList<String> names2Mails;
 
-    public NamesList(HashMap<String,String> list){
+    public NamesList(ArrayList<String> list){
         names2Mails=list;
     }
 }

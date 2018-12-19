@@ -3,5 +3,7 @@ package com.wordpress.priyankvex.easyocrscannerdemo.ServerEndpoint;
 import com.google.gson.Gson;
 
 public interface ServerAPI {
-    Gson getListOfNames();
-}
+    NamesList getListOfNames(String OcrTxt);
+    void SendConfirmationToServer(ServerAPIImpl.Operation operation, String mail , ServerAPIImpl.Floor floor);
+
+    }
