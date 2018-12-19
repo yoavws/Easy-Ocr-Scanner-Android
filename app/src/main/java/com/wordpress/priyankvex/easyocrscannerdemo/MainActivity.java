@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.wordpress.priyankvex.easyocrscannerdemo.ServerEndpoint.NamesList;
+import com.wordpress.priyankvex.easyocrscannerdemo.ServerEndpoint.ServerAPI;
+import com.wordpress.priyankvex.easyocrscannerdemo.ServerEndpoint.ServerAPIImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements EasyOcrScannerLis
 
 
     Button button2;
+    Button proccessButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +97,10 @@ public class MainActivity extends AppCompatActivity implements EasyOcrScannerLis
                 }
             }
         });
+        proccessButton = (Button) findViewById(R.id.proccessImageButton);
+
+
+
 
     }
 
@@ -103,19 +113,42 @@ public class MainActivity extends AppCompatActivity implements EasyOcrScannerLis
         super.onActivityResult(requestCode, resultCode, data);
         // Call onImageTaken() in onActivityResult.
         if (resultCode == RESULT_OK && requestCode == Config.REQUEST_CODE_CAPTURE_IMAGE){
-            mEasyOcrScanner.onImageTaken(requestCode, resultCode, data);
+            mEasyOcrScanner.onImageTaken();
+            //mEasyOcrScanner.onImageTaken(requestCode, resultCode, data);
         } else {
-            ImageView image = (ImageView) findViewById(R.id.pic);
-            image.setImageDrawable(Drawable.createFromPath(mCurrentPhotoPath));
-            ImageProcessingThread thread = new ImageProcessingThread(this,
-                                                                    imageFileStorageDir +imageFileNameWithSuffix,
-                                                                    imageFileStorageDir,
-                                                                    this,
-                                                                    "eng");
-            thread.execute();//EasyOcrScannerListener ocrScannerListener, String filePath, String directoryPath, Activity activity, String trainedDataCode);
+            //ImageView image = (ImageView) findViewById(R.id.pic);
+            //image.setImageDrawable(Drawable.createFromPath(mCurrentPhotoPath));
+
+
+            /////
+            if (android.os.Build.VERSION.SDK_INT > 9)
+            {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+            }
+            ServerAPI serverapi=new ServerAPIImpl();
+            try {
+                NamesList listOfNames = ((ServerAPIImpl) serverapi).getListOfNames("yoav weiss");
+                ((ServerAPIImpl) serverapi).SendConfirmationToServer(ServerAPIImpl.Operation.MAIL, "yoav.weiss@imperva.com", ServerAPIImpl.Floor.FIRST);
+                System.out.println("server res: "+listOfNames.names2Mails.get(0));
+            }catch (Exception e){
+                System.err.println("failed to reach server");
+            }
+
+            ////
+            proccessButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ImageProcessingThread thread = new ImageProcessingThread(MainActivity.this,
+                            mCurrentPhotoPath, //imageFileStorageDir +imageFileNameWithSuffix,
+                            imageFileStorageDir,
+                            MainActivity.this,
+                            "eng");
+                    thread.execute();//EasyOcrScannerListener ocrScannerListener, String filePath, String directoryPath, Activity activity, String trainedDataCode);
+                }
+            });
+
         }
-
-
     }
 
     /**
