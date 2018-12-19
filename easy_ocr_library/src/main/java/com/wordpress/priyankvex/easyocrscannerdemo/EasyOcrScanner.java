@@ -3,6 +3,7 @@ package com.wordpress.priyankvex.easyocrscannerdemo;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 
 import java.io.File;
@@ -31,9 +32,21 @@ public class EasyOcrScanner {
 
     public void takePicture(){
         Intent e = new Intent("android.media.action.IMAGE_CAPTURE");
+        /*
         this.filePathOriginal = FileUtils.getDirectory(this.directoryPathOriginal) + File.separator + Calendar.getInstance().getTimeInMillis() + ".jpg";
-        e.putExtra("output", Uri.fromFile(new File(this.filePathOriginal)));
 
+
+
+        e.putExtra("output", Uri.fromFile(new File(this.filePathOriginal)));
+*/
+
+
+        Uri imageUri = FileProvider.getUriForFile(
+                mActivity,
+                "com.wordpress.priyankvex.easyocrscannerdemo.provider", //(use your app signature + ".provider" )
+                new File(FileUtils.getDirectory(this.directoryPathOriginal) + File.separator + Calendar.getInstance().getTimeInMillis() + ".jpg"));
+
+        e.putExtra("output" , imageUri);
         startActivity(e);
     }
 
