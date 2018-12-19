@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +42,9 @@ public class MainActivity extends AppCompatActivity implements EasyOcrScannerLis
     public static final int REQUEST_TAKE_PHOTO = 1;
 
 
-    Button button2;
+    Button mailButton;
+    Button foodButton;
+
     Button proccessButton;
 
     @Override
@@ -70,34 +70,40 @@ public class MainActivity extends AppCompatActivity implements EasyOcrScannerLis
         });
 
 
-        button2 = (Button) findViewById(R.id.buttonThatWillWork);
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mailButton = (Button) findViewById(R.id.tenBisButton);
+        foodButton = (Button) findViewById(R.id.mailButton);
+        Button buttons[] = {mailButton,foodButton};
+        for (Button b : buttons) {
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
 
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                // Ensure that there's a camera activity to handle the intent
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    // Create the File where the photo should go
-                    File photoFile = null;
-                    try {
-                        photoFile = createImageFile();
-                    } catch (IOException ex) {
-                        // Error occurred while creating the File...
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    // Ensure that there's a camera activity to handle the intent
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        // Create the File where the photo should go
+                        File photoFile = null;
+                        try {
+                            photoFile = createImageFile();
+                        } catch (IOException ex) {
+                            // Error occurred while creating the File...
+                        }
+                        // Continue only if the File was successfully created
+                        if (photoFile != null) {
+                            Uri photoURI = FileProvider.getUriForFile(context,
+                                    "com.wordpress.priyankvex.easyocrscannerdemo.provider",
+                                    photoFile);
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                        }
+
                     }
-                    // Continue only if the File was successfully created
-                    if (photoFile != null) {
-                        Uri photoURI = FileProvider.getUriForFile(context,
-                                "com.wordpress.priyankvex.easyocrscannerdemo.provider",
-                                photoFile);
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-                    }
-
                 }
-            }
-        });
+            });
+
+        }
+
         proccessButton = (Button) findViewById(R.id.proccessImageButton);
 
 
@@ -127,17 +133,27 @@ public class MainActivity extends AppCompatActivity implements EasyOcrScannerLis
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                 StrictMode.setThreadPolicy(policy);
             }
-            ServerAPI serverapi=new ServerAPIImpl();
+            ServerAPI serverapi = new ServerAPIImpl();
+
+try {
+    serverapi.SendConfirmationToServer(ServerAPIImpl.Operation.FOOD, "yoav.weiss@imperva.com", ServerAPIImpl.Floor.FIRST, context);
+} catch (Exception e){
+    System.err.println("error bla bla");
+}       /*
+            // This is what we originally wanted to happen, it was written wrong, so we wrote the row
+            // above.
             try {
-                NamesList listOfNames = ((ServerAPIImpl) serverapi).getListOfNames("yoav weiss");
-                ((ServerAPIImpl) serverapi).SendConfirmationToServer(ServerAPIImpl.Operation.MAIL, "yoav.weiss@imperva.com", ServerAPIImpl.Floor.FIRST);
+                NamesList listOfNames = ((ServerAPIImpl) serverapi).getListOfNames("yoav weiss", context);
+                ((ServerAPIImpl) serverapi).SendConfirmationToServer(ServerAPIImpl.Operation.MAIL, "yoav.weiss@imperva.com", ServerAPIImpl.Floor.FIRST, MainActivity.this);
                 System.out.println("server res: "+listOfNames.names2Mails.get(0));
             }catch (Exception e){
                 System.err.println("failed to reach server");
             }
+
+
             Toast toast = Toast.makeText(this.context, "E-Mail sent successfuly!" , Toast.LENGTH_LONG);
             toast.show();
-
+*/
             ////
             proccessButton.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -74,9 +74,24 @@ public class ImageProcessingThread extends AsyncTask<Void, Void, Void> {
     }
 
     private Bitmap getBitmapFromPath() {
+
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inSampleSize = 4;
-        Bitmap bitmap = BitmapFactory.decodeFile(this.filePath, bmOptions);
+        Bitmap bitmap;
+        try {
+            bmOptions.inSampleSize = 4;
+            bitmap = BitmapFactory.decodeFile(this.filePath, bmOptions);
+        } catch (OutOfMemoryError o){
+            try {
+                bmOptions.inSampleSize = 2;
+                bitmap = BitmapFactory.decodeFile(this.filePath, bmOptions);
+
+            } catch (Exception e) {
+                bitmap = null;
+            }
+        } catch (Exception e) {
+            int k = 19;
+            bitmap = null;
+        }
         return bitmap;
     }
 

@@ -1,13 +1,23 @@
 package com.wordpress.priyankvex.easyocrscannerdemo.ServerEndpoint;
 
 import android.accounts.NetworkErrorException;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -39,11 +49,11 @@ public class ServerAPIImpl implements ServerAPI {
     //http://34.240.58.150:8090/api/scan-text/yoav"
     //"['Yoav weiss', 'yoav.weiss@imperva.com','Yoav weiss2', 'yoav.weiss@imperva.com','Yoav weiss3', 'yoav.weiss@imperva.com']"
     @Override
-    public NamesList getListOfNames(String ocrTxt) throws NetworkErrorException {
+    public NamesList getListOfNames(String ocrTxt , Context context) throws NetworkErrorException {
         NamesList parsedList=null;
         String responseStr =null;
         try {
-            responseStr = getListFromServer(ocrTxt);
+            getListFromServer(ocrTxt, context);
         }catch (Exception e){
             throw new NetworkErrorException("failed to reach server");
         }
@@ -58,7 +68,7 @@ public class ServerAPIImpl implements ServerAPI {
         return parsedList;
     }
     @Override
-    public void SendConfirmationToServer(Operation operation, String mail ,Floor floor)throws NetworkErrorException {
+    public void SendConfirmationToServer(Operation operation, String mail ,Floor floor, Context context)throws NetworkErrorException {
         String apiString=CONFIRMATION;
         String floorAPI="/"+floor+"/";
         String resString;
@@ -72,24 +82,47 @@ public class ServerAPIImpl implements ServerAPI {
         }
         URL url = buildAPI(apiString);
         try {
-            resString = urlConnection(url);
+            urlConnection(url, context);
         }catch (Exception e) {
             throw new NetworkErrorException("failed to reach server");
         }
-        System.out.println(" SendConfirmationToServer result: "+resString);
+        //System.out.println(" SendConfirmationToServer result: "+resString);
     }
 
 
-    public String getListFromServer(String ocrTxt) {
-        String resString=null;
+    public void getListFromServer(String ocrTxt , Context context) {
         URL url = buildAPI(SCAN_TEXT+ocrTxt);
-        resString = urlConnection(url);
-        return resString;
+        urlConnection(url, context);
     }
 
-    private String urlConnection(URL url) {
+    private void urlConnection(URL url , final Context context) {
        System.out.println("URL of API: "+url);
        String resString="";
+        // Instantiate the RequestQueue.
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(StringRequest.Method.GET , url.toString(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(context, "Mail sent successfully!!", Toast.LENGTH_SHORT).show();
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Server down. All the BASA.", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+
+/*
        HttpURLConnection urlConnection = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -108,7 +141,7 @@ public class ServerAPIImpl implements ServerAPI {
         } finally {
             urlConnection.disconnect();
         }
-        return resString;
+        return resString;*/
     }
 
     @Nullable
