@@ -14,10 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wordpress.priyankvex.easyocrscannerdemo.ServerEndpoint.NamesList;
 import com.wordpress.priyankvex.easyocrscannerdemo.ServerEndpoint.ServerAPI;
 import com.wordpress.priyankvex.easyocrscannerdemo.ServerEndpoint.ServerAPIImpl;
 
@@ -42,10 +42,10 @@ public class MainActivity extends AppCompatActivity implements EasyOcrScannerLis
     public static final int REQUEST_TAKE_PHOTO = 1;
 
 
-    Button mailButton;
-    Button foodButton;
+    ImageButton mailButton;
+    ImageButton foodButton;
 
-    Button proccessButton;
+    Button processbutton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements EasyOcrScannerLis
         setContentView(R.layout.activity_main);
         context = this;
 
-        textView = (TextView) findViewById(R.id.textView);
+        //textView = (TextView) findViewById(R.id.textView);
 
         // initialize EasyOcrScanner instance.
         mEasyOcrScanner = new EasyOcrScanner(MainActivity.this, "EasyOcrScanner",
@@ -70,10 +70,10 @@ public class MainActivity extends AppCompatActivity implements EasyOcrScannerLis
         });
 
 
-        mailButton = (Button) findViewById(R.id.tenBisButton);
-        foodButton = (Button) findViewById(R.id.mailButton);
-        Button buttons[] = {mailButton,foodButton};
-        for (Button b : buttons) {
+        mailButton = (ImageButton) findViewById(R.id.tenBisButton);
+        foodButton = (ImageButton) findViewById(R.id.mailButton);
+        ImageButton buttons[] = {mailButton,foodButton};
+        for (ImageButton b : buttons) {
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements EasyOcrScannerLis
 
         }
 
-        proccessButton = (Button) findViewById(R.id.proccessImageButton);
+        processbutton = (Button) findViewById(R.id.processImageButton);
 
 
 
@@ -125,6 +125,9 @@ public class MainActivity extends AppCompatActivity implements EasyOcrScannerLis
         } else {
             //ImageView image = (ImageView) findViewById(R.id.pic);
             //image.setImageDrawable(Drawable.createFromPath(mCurrentPhotoPath));
+
+
+            /****/
 
 
             /////
@@ -155,9 +158,10 @@ try {
             toast.show();
 */
             ////
-            proccessButton.setOnClickListener(new View.OnClickListener() {
+            processbutton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Toast.makeText(context, "Processing....", Toast.LENGTH_LONG).show();
                     ImageProcessingThread thread = new ImageProcessingThread(MainActivity.this,
                             mCurrentPhotoPath, //imageFileStorageDir +imageFileNameWithSuffix,
                             imageFileStorageDir,

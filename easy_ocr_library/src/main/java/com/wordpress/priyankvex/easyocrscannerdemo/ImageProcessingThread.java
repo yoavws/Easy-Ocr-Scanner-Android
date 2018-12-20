@@ -40,7 +40,7 @@ public class ImageProcessingThread extends AsyncTask<Void, Void, Void> {
         this.mOcrScannerListener = ocrScannerListener;
         this.filePath = filePath;
         this.directoryPath = directoryPath;
-        this.absoluteDirectoryPath = FileUtils.getDirectory(this.directoryPath);
+        this.absoluteDirectoryPath = /*FileUtils.getDirectory(*/this.directoryPath/*)*/;
         this.mActivity = activity;
         this.trainedDataCode = trainedDataCode;
     }

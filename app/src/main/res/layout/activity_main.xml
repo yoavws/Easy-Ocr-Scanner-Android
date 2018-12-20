@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -8,68 +8,76 @@
     >
 
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+
+        <RelativeLayout android:id="@+id/topOfScreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_above="@id/processImageButton"
+            android:gravity="center">
 
 
-
-        <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView"
-            android:layout_marginTop="45dp"
-            android:layout_gravity="center_horizontal"
-            android:textSize="8pt"
-            />
-
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button1"
-            android:layout_marginTop="20dp"
-            android:text="scan"
-            android:layout_gravity="center_vertical"
-            android:visibility="gone"
-            />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/button1"
+                android:layout_marginTop="20dp"
+                android:text="scan"
+                android:layout_gravity="center_vertical"
+                android:visibility="gone"/>
 
 
 
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tenBisButton"
-            android:text="10bis"
-            android:layout_below="@id/button1" />
+            <ImageButton android:id="@+id/tenBisButton"
+                android:layout_height="120dp"
+                android:layout_width="120dp"
+                android:background="@mipmap/tenbis2" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/mailButton"
-            android:text="Mail"
-            android:layout_below="@id/tenBisButton"
-            />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/proccessImageButton"
-            android:text="proccess"
-            android:layout_below="@id/tenBisButton"
-            android:visibility="gone"/>
-
-
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/pic"
-            android:layout_below="@id/tenBisButton"/>
+            <ImageButton android:id="@+id/mailButton"
+                android:background="@mipmap/mail"
+                android:layout_height="120dp"
+                android:layout_width="120dp"
+                android:layout_below="@id/tenBisButton" />
 
 
 
 
-    </RelativeLayout>
 
-</LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pic"
+                android:layout_below="@id/mailButton"/>
+
+
+
+
+        </RelativeLayout>
+
+
+
+
+
+            <Button
+                android:id="@+id/processImageButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginBottom="0dp"
+                android:text="process"
+                android:visibility="invisible" />
+
+
+
+
+
+
+
+
+
+</RelativeLayout>
